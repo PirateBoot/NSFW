@@ -1,7 +1,8 @@
 
 # NSFW - Fileless Malware
 
-![bsod](https://github.com/user-attachments/assets/28d25a60-2ecf-44a3-bdbc-d55bbb3757d0)
+![430945464-512965cb-5a4b-4e4b-9ffb-c3666278bd7f](https://github.com/user-attachments/assets/3108f067-a49b-45c1-b1c4-07691881c76b)
+
 
 ## LOLBins 101: Living off the Land Binaries & Scripts
 
