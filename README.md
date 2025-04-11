@@ -3,10 +3,6 @@
 
 ![bsod](https://github.com/user-attachments/assets/28d25a60-2ecf-44a3-bdbc-d55bbb3757d0)
 
-## Introduction
-
-This repository started out as a humble proof-of-concept—just me tinkering in the dark, learning the ropes of ransomware, wiperware, fileless malware, and the full MITRE ATT&CK kill chain. One year deep into the project, it has evolved significantly.
-
 ## LOLBins 101: Living off the Land Binaries & Scripts
 
 **LOLBins** are legitimate Windows utilities repurposed by attackers to execute payloads, evade detection, and persist. Because they're trusted system tools, they offer stealth and flexibility for malware operations.
