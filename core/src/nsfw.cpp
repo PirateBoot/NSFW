@@ -1,3 +1,6 @@
+// cl /LD nsfw.cpp /link /OUT:win32.dll
+
+
 #include <windows.h>
 #include <wtsapi32.h>
 #include <userenv.h>
