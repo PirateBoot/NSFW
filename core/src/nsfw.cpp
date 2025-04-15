@@ -1,4 +1,6 @@
 // cl /LD nsfw.cpp /link /OUT:win32.dll
+// For .exe version, replace DllMain with main() and remove DisableThreadLibraryCalls.
+
 
 
 #include <windows.h>
