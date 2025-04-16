@@ -1,3 +1,31 @@
+"100% file-less malware" is a real and dangerous thing — but it's important to understand what that actually means.
+
+What is File-less Malware?
+
+File-less malware doesn't write any files to disk. Instead, it operates entirely in memory (RAM) and often leverages legitimate system tools (like PowerShell, WMI, or macros in Office docs) to execute its malicious activities. Since it leaves little to no footprint on the hard drive, it's much harder to detect using traditional antivirus software.
+
+Can It Be Truly 100% File-less?
+
+In theory, yes — it can be completely file-less:
+
+Delivered via phishing emails using malicious macros or scripts
+
+Injects itself into legitimate processes (e.g., explorer.exe)
+
+Executes code directly in memory
+
+Uses system-native tools without dropping custom binaries
+
+
+But in practice, many so-called "file-less" attacks do use some files temporarily or drop components during later stages. So, while some attacks can be 100% file-less, most are “mostly” file-less, relying on a hybrid approach.
+
+Why It Matters
+
+Traditional antivirus often scans files — not memory or system behavior.
+
+File-less malware is stealthier and harder to analyze.
+
+Detection usually requires behavior-based tools like EDR (Endpoint Detection & Response).
 
 
 # ⚠️ Advisory & Legal Notice: Educational and Authorized Research Use Only
