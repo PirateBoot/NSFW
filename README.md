@@ -100,7 +100,7 @@ cmd.exe /c "attrib +h +s C:\Windows\Temp\*"
 - 🔧 [PrintNightmare Deep Dive](https://itm4n.github.io/printnightmare-not-over/)
 - 💀 [PrintNightmare Vulnerability Summary](https://cybersparksdotblog.wordpress.com/2024/11/25/windows-print-spooler-eop-the-printnightmare-of-2021/)
 - 🛠️ [LOLOL Farm – LOLBin Playground](https://lolol.farm/)
-- 🧠 [MITRE ATT&CK Entry - S0697](https://attack.mitre.org/software/S0697/)
+- 🧠 [MITRE ATT&CK Entry - S0697](https://attack.mitre.org/techniques/T1218/)
 - 🧬 [LOLGEN - Generate Abuse Chains](https://lolgen.hdks.org/)
 - 🦠 [Fileless Malware – Wikipedia Overview](https://en.wikipedia.org/wiki/Fileless_malware)
 - 🔗 [DLL Injection Reference](https://www.crow.rip/crows-nest/mal/dev/inject/dll-injection)
