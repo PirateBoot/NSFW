@@ -1,6 +1,41 @@
+# ⚠️ Advisory & Legal Warning: Educational Use Only
 
-# ⚠️ Advisory Warning: Educational Use Only  
-This repository contains content related to NSFW (Not Safe for Work) cybersecurity topics including fileless malware, LOLBins, and adversary simulation tactics. The information provided is strictly for **educational, academic, and controlled research lab environments only**. **Do not deploy or replicate these techniques in unauthorized systems.** Misuse may constitute a violation of laws and ethical guidelines.
+This repository contains **advanced cybersecurity techniques and tooling** related to:
+
+- Fileless malware simulation
+- Living-Off-the-Land Binaries (LOLBins)
+- Offensive security automation (PrintNightmare, SpoolFool, etc.)
+- Adversary emulation and red/purple team tradecraft
+- Drive-by phishing payload structures
+- GitHub Actions for lab-based CI/CD attacks
+
+> This content is provided **strictly for educational and academic purposes** in **controlled environments** such as:
+> - Cybersecurity research labs  
+> - Purple/Red Team testing frameworks  
+> - Cyber range simulations  
+> - Adversary emulation for SOC validation  
+> - Blue Team training and response testing  
+
+### 🧪 Lab Use Only
+
+This repository and its payloads are designed to **emulate real-world attack behavior** for use in **safe, isolated, and authorized environments only**.  
+**Do not deploy** any component of this repository on public-facing systems, third-party infrastructure, or any network you do not own or explicitly have written permission to test.
+
+### ❌ Unauthorized Usage is Prohibited
+
+- This repository must **not be used for malicious purposes**.
+- **Misuse of this code or techniques may violate local, national, and international laws**.
+- The maintainers of this repository are **not responsible for any misuse** or damage caused by replicating these examples outside of ethical research or sanctioned testing environments.
+
+### ✅ You Accept Full Responsibility
+
+By cloning, forking, or executing any content from this repository, you **agree to use it only for legal, ethical, and educational purposes**. You assume all responsibility for compliance with applicable laws, regulations, and policies.
+
+---
+
+**If you're unsure whether your use case qualifies as authorized, don't proceed. Consult your legal/compliance team or security leadership.**
+
+—
 
 ---
 
