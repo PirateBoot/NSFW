@@ -1,1 +1,0 @@
-We are not releasing binaries, please compile yourself.
