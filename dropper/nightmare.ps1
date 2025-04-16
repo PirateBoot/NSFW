@@ -1,14 +1,7 @@
 function Invoke-Nightmare
 {
-    <#
-        .SYNOPSIS
-        Exploits CVE-2021-34527 (PrintNightmare)
 
-        Authors:
-            Caleb Stewart - https://github.com/calebstewart
-            John Hammond - https://github.com/JohnHammond
-        URL: https://github.com/JohnHammond/CVE-2021-34527
-
+<#
         .DESCRIPTION
         Exploits CVE-2021-34527 (PrintNightmare) locally to add a new local administrator
         user with a known password. Optionally, this can be used to execute your own
