@@ -1,7 +1,7 @@
 
 <div align="center">
 
-# 🧠 **100% Fileless Malware Simulation**
+## 🧠 **100% Fileless Malware Simulation**
 > High-fidelity adversary emulation using in-memory execution and LOLBins
 
 ![License](https://img.shields.io/badge/license-MIT-black?style=flat-square)
@@ -11,7 +11,6 @@
 
 </div>
 
----
 ## Overview:
 Fileless malware is a type of attack that runs entirely in memory, using built-in system tools like PowerShell and rundll32 without ever writing files to disk, making it difficult for traditional antivirus to detect. While a fully fileless chain is possible—leveraging phishing, in-memory injection, and living-off-the-land binaries—in practice, traces like temporary files or registry entries often still appear during execution.
 
