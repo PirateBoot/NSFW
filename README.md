@@ -10,23 +10,16 @@
 ![MITRE ATT&CK](https://img.shields.io/badge/framework-MITRE_ATT%26CK-red?style=flat-square)
 
 </div>
-
-## Overview:
-Fileless malware is a type of attack that runs entirely in memory, using built-in system tools like PowerShell and rundll32 without ever writing files to disk, making it difficult for traditional antivirus to detect. While a fully fileless chain is possible—leveraging phishing, in-memory injection, and living-off-the-land binaries—in practice, traces like temporary files or registry entries often still appear during execution.
+![Fileless Malware Concept](https://github.com/user-attachments/assets/3108f067-a49b-45c1-b1c4-07691881c76b)
+---
 
 ## ⚠️ Advisory Warning: Educational Use Only  
 This repository contains content related to NSFW (Not Safe for Work) cybersecurity topics including fileless malware, LOLBins, and adversary simulation tactics. The information provided is strictly for **educational, academic, and controlled research lab environments only**. **Do not deploy or replicate these techniques in unauthorized systems.** Misuse may constitute a violation of laws and ethical guidelines.
 
 ---
 
-## 🧠 NSFW - Fileless Malware (Advanced Simulation Guide)
-
-![Fileless Malware Concept](https://github.com/user-attachments/assets/3108f067-a49b-45c1-b1c4-07691881c76b)
-
----
-
-## 🧩 LOLBins 101: Living off the Land Binaries & Scripts
-
+## Overview:
+Fileless malware is a type of attack that runs entirely in memory, using built-in system tools like PowerShell and rundll32 without ever writing files to disk, making it difficult for traditional antivirus to detect. While a fully fileless chain is possible—leveraging phishing, in-memory injection, and living-off-the-land binaries—in practice, traces like temporary files or registry entries often still appear during execution.
 **LOLBins** (Living off the Land Binaries) are legitimate Windows system utilities that adversaries repurpose to execute code, evade defenses, and persist. These tools are trusted, signed, and often overlooked by endpoint security solutions.
 
 ### ⚙️ Common LOLBins and Their Abuse Cases
