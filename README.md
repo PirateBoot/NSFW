@@ -1,7 +1,7 @@
 
-## 🧠 **100% Fileless Malware Simulation**
+## 🧠 **100% Fileless Malware **
 
-![Fileless Malware Concept](https://github.com/user-attachments/assets/3108f067-a49b-45c1-b1c4-07691881c76b)
+<img src="https://github.com/user-attachments/assets/3108f067-a49b-45c1-b1c4-07691881c76b" alt="Fileless Malware Concept" width="800"/>
 
 ## ⚠️ Advisory Warning: Educational Use Only  
 This repository contains content related to NSFW (Not Safe for Work) cybersecurity topics including fileless malware, LOLBins, and adversary simulation tactics. The information provided is strictly for **educational, academic, and controlled research lab environments only**. **Do not deploy or replicate these techniques in unauthorized systems.** Misuse may constitute a violation of laws and ethical guidelines.
