@@ -59,27 +59,6 @@ This repository is for:
 
 > 🔐 Use in **authorized labs only**
 
----
-
-## ❌ Prohibited Usage
-
-- 🚫 Unauthorized use is **illegal**
-- 🚫 Not for real-world deployment
-- 🚫 Authors **disclaim all liability**
-
----
-
-## ✅ Usage Terms
-
-By accessing this project, you confirm:
-- You have **legal and ethical authorization**
-- You operate in **controlled, sandboxed environments**
-- You accept **full responsibility**
-
-> ⚖️ Unsure about compliance? **Stop immediately** and consult legal authorities.
-
----
-
 ## 🔗 MITRE ATT&CK-Aligned PowerShell Simulation
 
 > ⚠️ This is a **non-operational** emulation for training and detection tuning.
