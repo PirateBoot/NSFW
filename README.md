@@ -1,10 +1,7 @@
-
-## 🧠 **100% Fileless Malware **
-
-<img src="https://github.com/user-attachments/assets/3108f067-a49b-45c1-b1c4-07691881c76b" alt="Fileless Malware Concept" width="800"/>
-
 ## ⚠️ Advisory Warning: Educational Use Only  
 This repository contains content related to NSFW (Not Safe for Work) cybersecurity topics including fileless malware, LOLBins, and adversary simulation tactics. The information provided is strictly for **educational, academic, and controlled research lab environments only**. **Do not deploy or replicate these techniques in unauthorized systems.** Misuse may constitute a violation of laws and ethical guidelines.
+
+<img src="https://github.com/user-attachments/assets/3108f067-a49b-45c1-b1c4-07691881c76b" alt="Fileless Malware Concept" width="800"/>
 
 ## Overview:
 Fileless malware is a type of attack that runs entirely in memory, using built-in system tools like PowerShell and rundll32 without ever writing files to disk, making it difficult for traditional antivirus to detect. While a fully fileless chain is possible—leveraging phishing, in-memory injection, and living-off-the-land binaries—in practice, traces like temporary files or registry entries often still appear during execution.
